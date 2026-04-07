@@ -24,6 +24,10 @@ A Claude Code skill pack that generates prospect-ready proposals for local marke
 ### Install
 
 ```bash
+# macOS: install WeasyPrint system dependencies first
+brew install gobject-introspection pango cairo glib
+
+# Clone and install Python dependencies
 git clone https://github.com/aisandler/brand-audit-v1.git
 cd brand-audit-v1
 pip install -r requirements.txt

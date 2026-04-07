@@ -70,8 +70,15 @@
     .reveal { opacity: 1 !important; transform: none !important; }
     .score-card:hover, .finding-card:hover, .detail-row:hover .detail-key,
     .detail-row:hover .detail-value { background: inherit; transform: none; }
-    .topbar { position: static; backdrop-filter: none; }
+    .topbar { position: static; }
     .no-print { display: none; }
+    /* Fix viewport-dependent CSS for WeasyPrint */
+    .cover { min-height: auto; padding: 120px 40px; }
+    .cover-title { font-size: 56px; }
+    .hero-title { font-size: 56px; }
+    .vitals-grid { grid-template-columns: repeat(5, 1fr); }
+    .scores-grid { grid-template-columns: repeat(4, 1fr); }
+    .pricing-grid { grid-template-columns: repeat(3, 1fr); }
   }
 
   /* ── Container ── */
@@ -116,7 +123,7 @@
     position: relative;
   }
   .cover-title {
-    font-family: 'Instrument Serif', serif;
+    font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
     font-size: clamp(42px, 5vw, 64px);
     font-weight: 400;
     line-height: 1.1;
@@ -171,7 +178,7 @@
     margin-bottom: 8px;
   }
   .section-title {
-    font-family: 'Instrument Serif', serif;
+    font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
     font-size: 36px;
     font-weight: 400;
     color: var(--text-primary);
@@ -251,7 +258,7 @@
 
   /* ── Lighthouse score variant ── */
   .score-card .score-number {
-    font-family: 'Instrument Serif', serif;
+    font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
     font-size: 42px;
     color: var(--text-primary);
     margin-bottom: 8px;
@@ -296,7 +303,7 @@
   .detail-value strong { color: var(--text-primary); font-weight: 500; }
   .detail-value .quote {
     color: var(--text-primary);
-    font-family: 'Instrument Serif', serif;
+    font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
     font-size: 16px;
     font-style: italic;
     line-height: 1.5;
@@ -384,7 +391,7 @@
     text-align: center;
   }
   .vital-value {
-    font-family: 'Instrument Serif', serif;
+    font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
     font-size: 28px;
     margin-bottom: 4px;
   }
@@ -530,7 +537,7 @@
   }
   .tier-card.highlighted .tier-name { margin-top: 24px; }
   .tier-price {
-    font-family: 'Instrument Serif', serif;
+    font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
     font-size: 48px;
     color: var(--text-primary);
     line-height: 1;
@@ -706,7 +713,7 @@
     margin-bottom: 16px;
   }
   .cta-banner-title {
-    font-family: 'Instrument Serif', serif;
+    font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
     font-size: 32px;
     color: var(--text-primary);
     margin-bottom: 16px;
@@ -787,7 +794,7 @@
   }
   .trust-card-number {
     font-size: 32px;
-    font-family: 'Instrument Serif', serif;
+    font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
     color: var(--accent);
     margin-bottom: 4px;
   }
