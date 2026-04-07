@@ -351,27 +351,68 @@ I put together a short report that breaks all of this down. No cost, no obligati
 
 ---
 
-## Step 10: Deliver
+## Step 10: Generate Follow-up Email
 
-Display the final summary:
+Write a ready-to-send follow-up email to `output/email-[slug].md`. This is the email the user sends after the call (or instead of a call if email is the only contact method).
+
+Use data from the prospect research, brand audit, and Lighthouse to personalize every line. No generic filler.
+
+```markdown
+**Subject:** Quick audit of [BUSINESS NAME]'s website — a few things you should see
+
+---
+
+Hi [DECISION MAKER NAME or "there"],
+
+[YOUR NAME] from [AGENCY NAME]. [If call happened: "Thanks for taking my call earlier." If no call: "I came across [BUSINESS NAME] while researching [industry] businesses in [location]."]
+
+I ran a quick audit on [website URL] and found a few things worth looking at:
+
+- **[Pain point 1, framed as impact]** — [e.g., "Your site takes about 6 seconds to load on mobile. Google's research shows over half of visitors leave after 3 seconds, so this is likely costing you traffic."]
+- **[Pain point 2, framed as impact]** — [e.g., "None of your pages have meta descriptions. This means Google is choosing what to show in search results, and it's not always flattering."]
+- **[Pain point 3, framed as opportunity]** — [e.g., "Your competitors in the area have online booking set up. Adding this alone could capture leads you're currently losing."]
+
+I put together a full report covering your brand presence, site performance, SEO, and conversion signals. It's attached.
+
+[If pricing was discussed: "I also included a few options for fixing the issues I found, starting at $[LOWEST TIER PRICE]."]
+
+No pressure at all. The report is yours either way. If anything stands out and you want to talk through it, just reply to this email or grab a time here: [AGENCY WEBSITE or BOOKING LINK].
+
+[YOUR NAME]
+[AGENCY NAME]
+[AGENCY PHONE]
+[AGENCY EMAIL]
+```
+
+---
+
+## Step 11: Deliver
+
+Display a step-by-step action plan so the user knows exactly what to do next:
 
 ```
-Ready to reach out to [CLIENT_NAME].
+Everything is ready for [CLIENT_NAME].
 
-Proposal files:
-- output/proposal-[slug].pdf — send this to the prospect
-- output/proposal-[slug].html — interactive web version
-- output/proposal-[slug].md — markdown version
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Sales prep:
-- output/brief-[slug].md — internal briefing, contact info, and call script
+YOUR FILES:
+1. output/brief-[slug].md          ← Read this first (contact info + call script)
+2. output/email-[slug].md          ← Copy/paste into your email client
+3. output/proposal-[slug].pdf      ← Attach this to the email
+4. output/proposal-[slug].html     ← Or send this link if hosted
 
-Audit summary:
-- Brand: Voice [rating], Visual [rating], SEO [rating], Conversion [rating]
-- Lighthouse: Performance [score], Accessibility [score], SEO [score]
-- Opportunity signals: [count]
+YOUR NEXT STEPS:
+1. Open brief-[slug].md and review the contact info and call script
+2. Call [CLIENT_NAME] at [phone if found] using the script in the brief
+3. After the call, open email-[slug].md and copy it into your email client
+4. Attach proposal-[slug].pdf and hit send
+5. Follow up in 3 days if no response
 
-Pricing: [template name] — [tier names and prices]
+AUDIT SNAPSHOT:
+Brand: Voice [rating], Visual [rating], SEO [rating], Conversion [rating]
+Lighthouse: Performance [score], Accessibility [score], SEO [score]
+Signals: [count] opportunity gaps identified
+Package: [template name] — [recommended tier] at $[price]
 ```
 
 ---
