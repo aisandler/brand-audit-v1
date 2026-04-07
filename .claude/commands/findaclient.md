@@ -19,45 +19,58 @@ User runs `/findaclient`. No arguments needed.
 
 ---
 
-## Step 1: Choose a Category
+## Step 1: Choose a Location
+
+Check if `geographic_focus` from the config is usable for local search (a specific city, region, or metro area). If the value is "national", empty, or too vague for local prospecting, use **AskUserQuestion** to ask:
+
+- Title: "What area should I search?"
+- Body: "Your config is set to '[geographic_focus]'. For prospecting, I need a specific city or metro area."
+- Placeholder: "e.g., Austin TX, Portland OR, Miami FL"
+
+Store the result as `SEARCH_LOCATION`.
+
+If the config already has a specific location (e.g., "Austin, TX"), use it directly as `SEARCH_LOCATION`.
+
+---
+
+## Step 2: Choose a Category
 
 Build a list of recommended search categories based on the agency config. For each target vertical, generate 2-3 specific business types that commonly need digital services. For example:
 
 - If vertical is "restaurants": suggest "restaurants", "coffee shops", "catering companies"
 - If vertical is "dental": suggest "dental practices", "orthodontists", "cosmetic dentists"
 - If vertical is "law firms": suggest "personal injury lawyers", "family law attorneys", "estate planning firms"
-- If vertical is "local-businesses": suggest "plumbers", "HVAC contractors", "auto repair shops", "salons", "fitness studios"
+- If vertical is "local-businesses" or verticals are vague/generic: suggest a broad mix of common local service businesses: "plumbers", "HVAC contractors", "auto repair shops", "salons", "fitness studios", "restaurants", "dentists", "chiropractors"
 
 Use **AskUserQuestion** to present the options:
 
-- Title: "What kind of business are you looking for?"
-- Options: the generated category list, each formatted as "[category] in [geographic_focus]"
-- Include a text input option for custom searches
+- Title: "What kind of business are you looking for in [SEARCH_LOCATION]?"
+- Options: the generated category list (do NOT append location to each option, it's already in the title)
+- Include a text input option for custom categories
 - Default: the first recommended category
 
 Example:
 
 ```
-Title: "What kind of business are you looking for?"
+Title: "What kind of business are you looking for in Austin, TX?"
 
-Suggested based on your profile:
+1. Plumbers
+2. HVAC contractors
+3. Auto repair shops
+4. Salons
+5. Fitness studios
+6. Restaurants
+7. Coffee shops
+8. Dentists
 
-1. Plumbers in Austin, TX
-2. HVAC contractors in Austin, TX
-3. Auto repair shops in Austin, TX
-4. Salons in Austin, TX
-5. Fitness studios in Austin, TX
-6. Restaurants in Austin, TX
-7. Coffee shops in Austin, TX
-
-Or type your own (e.g., "dentists in Portland")
+Or type your own category.
 ```
 
-Store the selected category and location.
+Store the selected category. The location is already stored from Step 1.
 
 ---
 
-## Step 2: Find Prospects
+## Step 3: Find Prospects
 
 Tell the user: "Searching for [category] in [location]..."
 
@@ -91,7 +104,7 @@ Rank prospects by opportunity density (total number of gaps). The business with 
 
 ---
 
-## Step 3: Pick a Prospect
+## Step 4: Pick a Prospect
 
 Use **AskUserQuestion** to present the ranked leads:
 
@@ -119,7 +132,7 @@ Store the selected business URL as `CLIENT_URL` and name as `CLIENT_NAME`.
 
 ---
 
-## Step 4: Deep Research
+## Step 5: Deep Research
 
 Tell the user: "Researching [CLIENT_NAME]..."
 
@@ -208,7 +221,7 @@ Display brief progress: "[CLIENT_NAME]: [industry] in [location]. [N] opportunit
 
 ---
 
-## Step 5: Brand Audit
+## Step 6: Brand Audit
 
 Tell the user: "Running brand audit on [CLIENT_URL]..."
 
@@ -238,7 +251,7 @@ Display progress: "Brand audit complete. Voice: [rating], Visual: [rating], SEO:
 
 ---
 
-## Step 6: Lighthouse Audit
+## Step 7: Lighthouse Audit
 
 Tell the user: "Running Lighthouse on [CLIENT_URL]..."
 
@@ -260,7 +273,7 @@ Display progress: "Lighthouse complete. Performance: [score], SEO: [score]."
 
 ---
 
-## Step 7: Choose Pricing
+## Step 8: Choose Pricing
 
 Read `config/agency-config.json` for the default pricing template.
 
@@ -289,7 +302,7 @@ Type a template name, or press enter for default.
 
 ---
 
-## Step 8: Generate Proposal
+## Step 9: Generate Proposal
 
 Read all three JSON files from `output/`.
 Read agency config and selected pricing template.
@@ -340,7 +353,7 @@ Open the PDF: `open output/proposal-[slug].pdf`
 
 ---
 
-## Step 9: Generate Sales Brief
+## Step 10: Generate Sales Brief
 
 Using data already collected from prospect research, brand audit, and Lighthouse, generate an internal sales document. This is NOT for the client. It's for the person making the call.
 
@@ -415,7 +428,7 @@ I put together a short report that breaks all of this down. No cost, no obligati
 
 ---
 
-## Step 10: Generate Follow-up Email
+## Step 11: Generate Follow-up Email
 
 Write a ready-to-send follow-up email to `output/email-[slug].md`. This is the email the user sends after the call (or instead of a call if email is the only contact method).
 
@@ -450,7 +463,7 @@ No pressure at all. The report is yours either way. If anything stands out and y
 
 ---
 
-## Step 11: Deliver
+## Step 12: Deliver
 
 Display a step-by-step action plan so the user knows exactly what to do next:
 
