@@ -102,6 +102,31 @@ For each business, do a quick scan of the homepage:
 
 Rank prospects by opportunity density (total number of gaps). The business with the most gaps is the strongest sales opportunity.
 
+**Save the full prospect list** before presenting it to the user. Create `output/prospect-scans/` if it doesn't exist (`mkdir -p output/prospect-scans` via Bash). Write to `output/prospect-scans/[category]-[location]-[date].json`:
+
+```json
+{
+  "search": {
+    "category": "dentists",
+    "location": "Austin, TX",
+    "date": "YYYY-MM-DD"
+  },
+  "prospects": [
+    {
+      "rank": 1,
+      "name": "...",
+      "url": "...",
+      "rating": 4.2,
+      "review_count": 45,
+      "opportunity_signals": ["no SSL", "missing meta descriptions", "..."],
+      "signal_count": 5
+    }
+  ]
+}
+```
+
+This preserves the full roster so the user can come back and run proposals on other candidates later without re-searching.
+
 ---
 
 ## Step 4: Pick a Prospect
