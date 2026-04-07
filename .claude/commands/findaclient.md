@@ -19,6 +19,73 @@ User runs `/findaclient`. No arguments needed.
 
 ---
 
+## Step 0: Pipeline Check
+
+Check if `output/pipeline.csv` exists by reading the file.
+
+If it exists and has entries, use **AskUserQuestion**:
+
+- Title: "You have [N] prospects in your pipeline. What do you want to do?"
+- Options:
+  1. "Search for new prospects"
+  2. "Review pipeline"
+- Default: "1"
+
+### If "Search for new prospects": proceed to Step 1.
+
+### If "Review pipeline":
+
+Read `output/pipeline.csv`. Display the pipeline as a table:
+
+```
+Your Pipeline ([N] prospects):
+
+| # | Business | Location | Category | Score | Status | Last Scanned |
+|---|----------|----------|----------|-------|--------|--------------|
+| 1 | Joe's Pizza | Austin, TX | Restaurants | 7/10 | new | 2026-04-05 |
+| 2 | Portland Dental | Portland, OR | Dentists | 5/10 | contacted | 2026-04-03 |
+| ... |
+
+Statuses: new, contacted, proposed, won, lost, skipped
+```
+
+Use **AskUserQuestion**:
+
+- Title: "Pick a prospect to work on, or change a status."
+- Body: "Enter a number to generate a proposal, or type 'status 2 contacted' to update a row."
+- Default: "1"
+
+If the user picks a number:
+- Re-scan that prospect's URL by WebFetching the homepage
+- Re-evaluate opportunity signals and update the score in the CSV
+- Display: "[Business]: score updated from [old] to [new]. [N] signals found."
+- If the score changed significantly (more than 2 points), note what changed
+- Set `CLIENT_URL` and `CLIENT_NAME` from the selected row, then skip to Step 5 (Deep Research)
+
+If the user updates a status:
+- Update the row in `output/pipeline.csv`
+- Display confirmation, then re-show the pipeline
+
+---
+
+## Pipeline CSV Format
+
+The file `output/pipeline.csv` is created on the first run if it doesn't exist. Format:
+
+```csv
+date,business_name,url,category,location,signal_count,opportunity_score,status,last_scanned
+2026-04-07,Joe's Pizza,https://joespizza.com,restaurants,Austin TX,7,7,new,2026-04-07
+```
+
+**Opportunity score** is calculated as the signal count (number of gaps found) on a 1-10 scale:
+- 8-10: Hot prospect (many gaps, high opportunity)
+- 5-7: Warm prospect (some gaps)
+- 1-4: Cool prospect (few gaps, may not need much help)
+
+After every `/findaclient` run that selects a prospect, append or update that prospect's row in the CSV. Set status to "proposed" after a proposal is generated.
+
+---
+
 ## Step 1: Choose a Location
 
 Check if `geographic_focus` from the config is usable for local search (a specific city, region, or metro area). If the value is "national", empty, or too vague for local prospecting, use **AskUserQuestion** to ask:
@@ -126,6 +193,8 @@ Rank prospects by opportunity density (total number of gaps). The business with 
 ```
 
 This preserves the full roster so the user can come back and run proposals on other candidates later without re-searching.
+
+**Add all found prospects to the pipeline.** For each prospect found, append a row to `output/pipeline.csv` (create with header row if the file doesn't exist). Set status to "new". If a prospect with the same URL already exists in the CSV, update its signal count, opportunity score, and last_scanned date instead of adding a duplicate.
 
 ---
 
@@ -521,7 +590,11 @@ Brand: Voice [rating], Visual [rating], SEO [rating], Conversion [rating]
 Lighthouse: Performance [score], Accessibility [score], SEO [score]
 Signals: [count] opportunity gaps identified
 Package: [template name] — [recommended tier] at $[price]
+
+Pipeline: [CLIENT_NAME] marked as "proposed" in output/pipeline.csv
 ```
+
+**Update the pipeline:** Find the row for `CLIENT_URL` in `output/pipeline.csv` and set status to "proposed". Update the last_scanned date.
 
 ---
 
