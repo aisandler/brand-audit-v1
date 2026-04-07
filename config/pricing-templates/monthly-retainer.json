@@ -1,0 +1,50 @@
+{
+  "template_name": "Monthly Retainer",
+  "tiers": [
+    {
+      "name": "Essentials",
+      "price": 997,
+      "highlight": false,
+      "description": "Foundational digital presence management.",
+      "line_items": [
+        "Monthly SEO audit and fixes",
+        "2 blog posts per month",
+        "Social media scheduling (2 platforms)",
+        "Google Business Profile management",
+        "Monthly analytics report"
+      ]
+    },
+    {
+      "name": "Growth",
+      "price": 2500,
+      "highlight": true,
+      "description": "Active growth and lead generation.",
+      "line_items": [
+        "Everything in Essentials",
+        "4 blog posts per month",
+        "Social media scheduling (4 platforms)",
+        "Paid ad management (up to $2k spend)",
+        "Landing page creation and A/B testing",
+        "Bi-weekly strategy calls",
+        "Quarterly content calendar"
+      ]
+    },
+    {
+      "name": "Scale",
+      "price": 5000,
+      "highlight": false,
+      "description": "Full-service digital marketing.",
+      "line_items": [
+        "Everything in Growth",
+        "8 blog posts per month",
+        "Social media scheduling (all platforms)",
+        "Paid ad management (up to $10k spend)",
+        "Email marketing campaigns",
+        "Conversion rate optimization",
+        "Video content production (2/mo)",
+        "Dedicated account manager",
+        "Weekly strategy calls"
+      ]
+    }
+  ]
+}

@@ -99,6 +99,67 @@ Based on the analysis, identify:
 
 ---
 
+## Phase 3.5: JSON Export (conditional)
+
+If the user included `--save-json` in the arguments OR this skill was invoked as part of `/proposal`:
+
+1. Create `output/` directory if it doesn't exist (via Bash: `mkdir -p output`)
+2. Write all findings to `output/brand-audit.json` with this structure:
+
+```json
+{
+  "business_name": "...",
+  "url": "...",
+  "date": "YYYY-MM-DD",
+  "pages_analyzed": ["...", "..."],
+  "scores": {
+    "voice_messaging": "Strong",
+    "visual_identity": "Adequate",
+    "seo": "Weak",
+    "conversion": "Strong"
+  },
+  "voice": {
+    "characteristics": ["professional", "warm"],
+    "headline": "...",
+    "value_proposition": "...",
+    "messaging_themes": ["...", "..."],
+    "language_orientation": { "customer_centric": 60, "company_centric": 40 },
+    "tone_consistency": "consistent"
+  },
+  "visual": {
+    "colors": [{ "hex": "#3B82F6", "name": "blue" }],
+    "fonts": { "heading": "...", "body": "..." },
+    "aesthetic": "..."
+  },
+  "seo": {
+    "pages": [
+      {
+        "url": "...",
+        "title": { "text": "...", "length": 55 },
+        "meta_description": { "text": "...", "length": 150 },
+        "h1": "..."
+      }
+    ],
+    "schema_types": [],
+    "sitemap": true,
+    "robots_txt": true,
+    "https": true
+  },
+  "conversion": {
+    "ctas": [{ "page": "...", "text": "...", "placement": "above-fold" }],
+    "trust_elements": { "testimonials": 0, "case_studies": 0, "client_logos": 0 },
+    "lead_capture": ["contact form", "phone"],
+    "above_fold_cta": { "present": true, "text": "..." }
+  },
+  "strengths": ["...", "...", "..."],
+  "quick_wins": ["...", "...", "..."]
+}
+```
+
+3. Still display the full markdown report in chat (proceed to Phase 4 as normal).
+
+---
+
 ## Phase 4: Output
 
 Display the report directly in chat using this exact format. Do NOT save any files.
@@ -196,7 +257,7 @@ This skill speaks in The Viable Edge brand voice:
 
 ## What This Skill Does NOT Do
 
-- Does not save files to disk
+- Does not save files to disk unless `--save-json` is passed
 - Does not modify any project files
 - Does not create brand architecture
 - Does not use browser automation (WebFetch only)

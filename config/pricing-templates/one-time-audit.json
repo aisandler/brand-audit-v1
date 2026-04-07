@@ -1,0 +1,22 @@
+{
+  "template_name": "Comprehensive Digital Audit",
+  "tiers": [
+    {
+      "name": "Deep Audit",
+      "price": 1500,
+      "highlight": false,
+      "description": "Complete analysis of your digital presence.",
+      "line_items": [
+        "Full brand audit with competitive analysis",
+        "Lighthouse performance audit",
+        "SEO technical audit with keyword research",
+        "Content gap analysis",
+        "Social media audit",
+        "Google Business Profile optimization review",
+        "Conversion funnel analysis",
+        "Prioritized 90-day action plan",
+        "60-minute strategy presentation"
+      ]
+    }
+  ]
+}

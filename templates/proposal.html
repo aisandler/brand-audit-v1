@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ proposal_title }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* ── Design tokens ── */
+  :root {
+    --bg-primary: #06060a;
+    --bg-card: #0e0e14;
+    --bg-card-hover: #13131b;
+    --bg-elevated: #1a1a24;
+    --border: #1e1e2a;
+    --border-accent: #2a2a3a;
+    --text-primary: #e8e8ed;
+    --text-secondary: #8a8a9a;
+    --text-muted: #55556a;
+    --accent: {{ primary_color | default('#3B82F6') }};
+    --accent-dim: {{ accent_dim | default('#2563EB') }};
+    --accent-glow: {{ accent_glow | default('rgba(59, 130, 246, 0.15)') }};
+    --accent-glow-strong: {{ accent_glow_strong | default('rgba(59, 130, 246, 0.25)') }};
+    --green: #34d399;
+    --green-dim: rgba(52, 211, 153, 0.12);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251, 191, 36, 0.12);
+    --red: #f87171;
+    --red-dim: rgba(248, 113, 113, 0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 20px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Noise overlay (screen only) ── */
+  @media screen {
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+  }
+
+  /* ── WeasyPrint / Print rules ── */
+  @page {
+    size: A4;
+    margin: 20mm 25mm;
+  }
+  @page :first {
+    margin: 0;
+  }
+  @media print {
+    body::before { display: none; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .score-card:hover, .finding-card:hover, .detail-row:hover .detail-key,
+    .detail-row:hover .detail-value { background: inherit; transform: none; }
+    .topbar { position: static; backdrop-filter: none; }
+    .no-print { display: none; }
+  }
+
+  /* ── Container ── */
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ═══════════════════════════════════════
+     COVER PAGE
+     ═══════════════════════════════════════ */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 40px;
+    position: relative;
+    page-break-after: always;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cover-agency {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .cover-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(42px, 5vw, 64px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    max-width: 700px;
+    position: relative;
+  }
+  .cover-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .cover-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .cover-date {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    position: relative;
+  }
+  .cover-footer {
+    position: absolute;
+    bottom: 48px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+  .cover-footer-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .cover-footer-text span { color: var(--accent); }
+
+  /* ═══════════════════════════════════════
+     SECTION HEADERS
+     ═══════════════════════════════════════ */
+  .section {
+    margin-bottom: 72px;
+    page-break-inside: avoid;
+  }
+  .section-number {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+    line-height: 1.2;
+  }
+  .section-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border-accent);
+    margin-bottom: 32px;
+  }
+
+  /* ═══════════════════════════════════════
+     SCORE CARDS
+     ═══════════════════════════════════════ */
+  .scores-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .score-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .score-card.strong::before { background: var(--green); }
+  .score-card.adequate::before { background: var(--amber); }
+  .score-card.weak::before { background: var(--red); }
+  .score-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .score-dimension {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+  }
+  .score-badge.strong { color: var(--green); background: var(--green-dim); }
+  .score-badge.adequate { color: var(--amber); background: var(--amber-dim); }
+  .score-badge.weak { color: var(--red); background: var(--red-dim); }
+  .score-badge::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+  }
+  .score-badge.strong::before { background: var(--green); }
+  .score-badge.adequate::before { background: var(--amber); }
+  .score-badge.weak::before { background: var(--red); }
+
+  /* ── Lighthouse score variant ── */
+  .score-card .score-number {
+    font-family: 'Instrument Serif', serif;
+    font-size: 42px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+
+  /* ═══════════════════════════════════════
+     DETAIL GRID (key/value pairs)
+     ═══════════════════════════════════════ */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-card);
+    margin-bottom: 24px;
+  }
+  .detail-row { display: contents; }
+  .detail-key {
+    padding: 16px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+  }
+  .detail-value {
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    line-height: 1.7;
+  }
+  .detail-row:last-child .detail-key,
+  .detail-row:last-child .detail-value { border-bottom: none; }
+  .detail-value strong { color: var(--text-primary); font-weight: 500; }
+  .detail-value .quote {
+    color: var(--text-primary);
+    font-family: 'Instrument Serif', serif;
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ═══════════════════════════════════════
+     SEO TABLE
+     ═══════════════════════════════════════ */
+  .seo-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  .seo-table thead { background: var(--bg-elevated); }
+  .seo-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .seo-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .seo-table tr:last-child td { border-bottom: none; }
+  .seo-table .page-name { font-weight: 600; color: var(--text-primary); }
+  .seo-table .char-count { color: var(--text-muted); font-size: 11px; }
+  .seo-table .missing { color: var(--red); font-style: italic; }
+
+  /* ── Technical checks ── */
+  .tech-checks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+  .tech-check {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tech-check-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .tech-check-icon.pass { background: var(--green-dim); color: var(--green); }
+  .tech-check-icon.fail { background: var(--red-dim); color: var(--red); }
+  .tech-check-label { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+
+  /* ═══════════════════════════════════════
+     CORE WEB VITALS GRID
+     ═══════════════════════════════════════ */
+  .vitals-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .vital-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+  }
+  .vital-value {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+  .vital-value.good { color: var(--green); }
+  .vital-value.needs-improvement { color: var(--amber); }
+  .vital-value.poor { color: var(--red); }
+  .vital-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  /* ═══════════════════════════════════════
+     FINDINGS (Strengths & Quick Wins)
+     ═══════════════════════════════════════ */
+  .findings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .finding-column-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .finding-column-title.strengths { color: var(--green); }
+  .finding-column-title.wins { color: var(--amber); }
+  .finding-column-title::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 2px;
+  }
+  .finding-column-title.strengths::before { background: var(--green); }
+  .finding-column-title.wins::before { background: var(--amber); }
+  .finding-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .finding-number {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    letter-spacing: 0.06em;
+  }
+  .finding-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .finding-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* ═══════════════════════════════════════
+     ISSUES LIST (Lighthouse)
+     ═══════════════════════════════════════ */
+  .issue-list {
+    list-style: none;
+  }
+  .issue-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+  .issue-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .issue-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .issue-savings {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--amber);
+    margin-top: 8px;
+  }
+
+  /* ═══════════════════════════════════════
+     PRICING TIERS
+     ═══════════════════════════════════════ */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat({{ tier_count | default('3') }}, 1fr);
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+  .tier-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    position: relative;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .tier-card.highlighted {
+    border-color: var(--accent);
+    box-shadow: 0 0 40px var(--accent-glow);
+  }
+  .tier-card.highlighted::before {
+    content: 'Recommended';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+    background: var(--accent);
+  }
+  .tier-name {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    margin-top: 8px;
+  }
+  .tier-card.highlighted .tier-name { margin-top: 24px; }
+  .tier-price {
+    font-family: 'Instrument Serif', serif;
+    font-size: 48px;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .tier-price .currency {
+    font-size: 24px;
+    color: var(--text-muted);
+    vertical-align: top;
+    line-height: 1.8;
+  }
+  .tier-price .period {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .tier-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .tier-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 24px;
+  }
+  .tier-items {
+    list-style: none;
+  }
+  .tier-items li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .tier-items li:last-child { border-bottom: none; }
+  .tier-items li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  /* ═══════════════════════════════════════
+     PROSPECT OVERVIEW
+     ═══════════════════════════════════════ */
+  .prospect-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .prospect-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .prospect-card-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .prospect-card-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+  .prospect-card-value a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+    padding-bottom: 1px;
+  }
+
+  /* ═══════════════════════════════════════
+     RECOMMENDATIONS
+     ═══════════════════════════════════════ */
+  .rec-list {
+    counter-reset: rec;
+  }
+  .rec-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 24px 24px 64px;
+    margin-bottom: 16px;
+    position: relative;
+    page-break-inside: avoid;
+  }
+  .rec-item::before {
+    counter-increment: rec;
+    content: counter(rec);
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rec-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .rec-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+  .rec-service {
+    display: inline-flex;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--accent-glow);
+    color: var(--accent);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    margin-top: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ═══════════════════════════════════════
+     CTA / NEXT STEPS BANNER
+     ═══════════════════════════════════════ */
+  .cta-banner {
+    margin: 48px 0 60px;
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(135deg, #0c1a3a 0%, #0a1228 50%, #06060a 100%);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    page-break-inside: avoid;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .cta-banner-inner {
+    padding: 56px 48px;
+    position: relative;
+  }
+  .cta-banner-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .cta-banner-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    line-height: 1.2;
+    max-width: 560px;
+  }
+  .cta-banner-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    max-width: 540px;
+    line-height: 1.65;
+  }
+  .cta-contact {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 32px;
+    margin-top: 24px;
+  }
+  .cta-contact-item {
+    font-size: 13px;
+  }
+  .cta-contact-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .cta-contact-value {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  .cta-contact-value a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* ═══════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════ */
+  .footer {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  .footer-left { font-size: 12px; color: var(--text-muted); }
+  .footer-right { font-size: 11px; color: var(--text-muted); letter-spacing: 0.04em; }
+
+  /* ── Color swatches ── */
+  .color-swatches { display: flex; gap: 16px; margin-top: 4px; }
+  .swatch { display: flex; align-items: center; gap: 10px; }
+  .swatch-circle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border-accent);
+    flex-shrink: 0;
+  }
+  .swatch-hex { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+  .swatch-name { font-size: 11px; color: var(--text-muted); }
+
+  /* ── Trust signals ── */
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .trust-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .trust-card-number {
+    font-size: 32px;
+    font-family: 'Instrument Serif', serif;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .trust-card-label { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; }
+  .trust-card-detail { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE
+     ═══════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .container { padding: 0 20px; }
+    .scores-grid { grid-template-columns: repeat(2, 1fr); }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .findings { grid-template-columns: 1fr; }
+    .tech-checks { grid-template-columns: repeat(2, 1fr); }
+    .trust-grid { grid-template-columns: 1fr; }
+    .vitals-grid { grid-template-columns: repeat(2, 1fr); }
+    .prospect-grid { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .detail-key { border-right: none; }
+    .cta-contact { grid-template-columns: 1fr; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     COVER PAGE
+     ══════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-agency">{{ agency_name }}</div>
+  <h1 class="cover-title">Digital Proposal for <em>{{ client_name }}</em></h1>
+  <p class="cover-subtitle">Prepared by {{ agency_name }}</p>
+  <p class="cover-date">{{ date }}</p>
+  {% if agency_tagline %}
+  <div class="cover-footer">
+    <p class="cover-footer-text">{{ agency_tagline }}</p>
+  </div>
+  {% endif %}
+</div>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════════
+       SECTION 1: EXECUTIVE SUMMARY
+       ══════════════════════════════════════════ -->
+  <section class="section" style="padding-top: 60px;">
+    <div class="section-number">01</div>
+    <h2 class="section-title">Executive Summary</h2>
+    <div class="section-divider"></div>
+
+    <div class="prospect-grid">
+      <div class="prospect-card">
+        <div class="prospect-card-label">Business</div>
+        <div class="prospect-card-value">{{ client_name }}</div>
+      </div>
+      <div class="prospect-card">
+        <div class="prospect-card-label">Website</div>
+        <div class="prospect-card-value"><a href="{{ client_url }}">{{ client_url }}</a></div>
+      </div>
+      <div class="prospect-card">
+        <div class="prospect-card-label">Industry</div>
+        <div class="prospect-card-value">{{ client_industry }}</div>
+      </div>
+    </div>
+
+    <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 32px;">
+      {{ executive_summary }}
+    </p>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 2: BRAND AUDIT
+       ══════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-number">02</div>
+    <h2 class="section-title">Brand Audit</h2>
+    <div class="section-divider"></div>
+
+    <!-- Brand Audit Scores -->
+    <div class="scores-grid">
+      {{ brand_audit_score_cards }}
+    </div>
+
+    <!-- Voice & Messaging -->
+    <h3 style="font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px;">Voice & Messaging</h3>
+    <div class="detail-grid">
+      {{ brand_audit_voice_details }}
+    </div>
+
+    <!-- Visual Identity -->
+    <h3 style="font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; margin-top: 32px;">Visual Identity</h3>
+    <div class="detail-grid">
+      {{ brand_audit_visual_details }}
+    </div>
+
+    <!-- SEO Snapshot -->
+    <h3 style="font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; margin-top: 32px;">SEO Snapshot</h3>
+    <table class="seo-table">
+      {{ brand_audit_seo_table }}
+    </table>
+
+    <div class="tech-checks">
+      {{ brand_audit_tech_checks }}
+    </div>
+
+    <!-- Conversion Signals -->
+    <h3 style="font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; margin-top: 32px;">Conversion Signals</h3>
+    {{ brand_audit_conversion }}
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 3: PERFORMANCE AUDIT
+       ══════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-number">03</div>
+    <h2 class="section-title">Performance Audit</h2>
+    <div class="section-divider"></div>
+
+    <!-- Lighthouse Scores -->
+    <div class="scores-grid">
+      {{ lighthouse_score_cards }}
+    </div>
+
+    <!-- Core Web Vitals -->
+    <h3 style="font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px;">Core Web Vitals</h3>
+    <div class="vitals-grid">
+      {{ lighthouse_vitals }}
+    </div>
+
+    <!-- Top Issues -->
+    <h3 style="font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px;">Top Issues</h3>
+    <div class="issue-list">
+      {{ lighthouse_issues }}
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 4: RECOMMENDATIONS
+       ══════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-number">04</div>
+    <h2 class="section-title">Recommendations</h2>
+    <div class="section-divider"></div>
+
+    <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 32px;">
+      {{ recommendations_intro }}
+    </p>
+
+    <div class="rec-list">
+      {{ recommendations }}
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 5: INVESTMENT
+       ══════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-number">05</div>
+    <h2 class="section-title">Investment</h2>
+    <div class="section-divider"></div>
+
+    <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 32px;">
+      {{ investment_intro }}
+    </p>
+
+    <div class="pricing-grid">
+      {{ pricing_tiers }}
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 6: NEXT STEPS
+       ══════════════════════════════════════════ -->
+  <div class="cta-banner">
+    <div class="cta-banner-inner">
+      <div class="cta-banner-eyebrow">Next Steps</div>
+      <div class="cta-banner-title">Ready to get started?</div>
+      <div class="cta-banner-desc">
+        {{ next_steps_text }}
+      </div>
+      <div class="cta-contact">
+        {% if agency_email %}
+        <div class="cta-contact-item">
+          <div class="cta-contact-label">Email</div>
+          <div class="cta-contact-value"><a href="mailto:{{ agency_email }}">{{ agency_email }}</a></div>
+        </div>
+        {% endif %}
+        {% if agency_phone %}
+        <div class="cta-contact-item">
+          <div class="cta-contact-label">Phone</div>
+          <div class="cta-contact-value">{{ agency_phone }}</div>
+        </div>
+        {% endif %}
+        {% if agency_website %}
+        <div class="cta-contact-item">
+          <div class="cta-contact-label">Website</div>
+          <div class="cta-contact-value"><a href="{{ agency_website }}">{{ agency_website }}</a></div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-left">{{ agency_name }} &middot; {{ date }}</div>
+    <div class="footer-right">Prepared for {{ client_name }}</div>
+  </div>
+
+</div>
+
+</body>
+</html>

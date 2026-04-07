@@ -1,0 +1,48 @@
+{
+  "template_name": "Website Redesign",
+  "tiers": [
+    {
+      "name": "Starter",
+      "price": 2500,
+      "highlight": false,
+      "description": "Essential refresh for small businesses.",
+      "line_items": [
+        "5-page responsive redesign",
+        "Mobile optimization",
+        "Basic SEO setup",
+        "Contact form integration",
+        "2 rounds of revisions"
+      ]
+    },
+    {
+      "name": "Growth",
+      "price": 5000,
+      "highlight": true,
+      "description": "Full redesign with conversion focus.",
+      "line_items": [
+        "Up to 10 pages",
+        "Custom design + brand refresh",
+        "SEO optimization (all pages)",
+        "Analytics and tracking setup",
+        "CRM integration",
+        "3 rounds of revisions",
+        "30-day post-launch support"
+      ]
+    },
+    {
+      "name": "Premium",
+      "price": 10000,
+      "highlight": false,
+      "description": "Complete digital transformation.",
+      "line_items": [
+        "Unlimited pages",
+        "Full brand identity package",
+        "Advanced SEO + content strategy",
+        "E-commerce or booking system",
+        "Custom integrations",
+        "Ongoing optimization (90 days)",
+        "Priority support"
+      ]
+    }
+  ]
+}

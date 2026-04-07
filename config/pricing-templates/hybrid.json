@@ -1,0 +1,50 @@
+{
+  "template_name": "Website + Retainer Bundle",
+  "tiers": [
+    {
+      "name": "Launch",
+      "price": "4000 + 750/mo",
+      "highlight": false,
+      "description": "Get online and stay visible.",
+      "line_items": [
+        "5-page website build",
+        "Basic SEO setup",
+        "Monthly maintenance and updates",
+        "Monthly analytics report",
+        "Quarterly strategy review"
+      ]
+    },
+    {
+      "name": "Accelerate",
+      "price": "7500 + 1500/mo",
+      "highlight": true,
+      "description": "Launch with built-in growth.",
+      "line_items": [
+        "Up to 10 pages with custom design",
+        "Full SEO optimization",
+        "Monthly content creation (2 posts)",
+        "Social media management (2 platforms)",
+        "Paid ad setup and management",
+        "Bi-weekly check-ins"
+      ]
+    },
+    {
+      "name": "Dominate",
+      "price": "15000 + 3500/mo",
+      "highlight": false,
+      "description": "Market-leading digital presence.",
+      "line_items": [
+        "Unlimited pages with premium design",
+        "Full brand identity package",
+        "Weekly content creation",
+        "Full social media management",
+        "Paid ad management (up to $10k spend)",
+        "Email marketing automation",
+        "Conversion rate optimization",
+        "Video content (2/mo)",
+        "Weekly strategy calls",
+        "Dedicated team"
+      ]
+    }
+  ]
+}
