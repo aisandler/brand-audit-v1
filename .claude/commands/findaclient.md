@@ -130,6 +130,10 @@ Pick a number to generate a full proposal.
 
 Store the selected business URL as `CLIENT_URL` and name as `CLIENT_NAME`.
 
+Create a filename slug from `CLIENT_NAME`: lowercase, replace spaces with hyphens, remove special characters. Store as `SLUG`.
+
+Create the prospect output folder: `mkdir -p output/[SLUG]` via Bash. **All files for this prospect go into `output/[SLUG]/`.** This keeps each prospect's files isolated when running multiple audits.
+
 ---
 
 ## Step 5: Deep Research
@@ -166,9 +170,7 @@ For each competitor found (up to 3), **WebFetch their homepage in parallel**. Fo
 
 Record the same checks for the prospect (from the homepage already fetched). This builds the data for the competitive comparison table in the proposal.
 
-Create `output/` directory if it doesn't exist (`mkdir -p output` via Bash).
-
-Write to `output/prospect-research.json`:
+Write to `output/[SLUG]/prospect-research.json`:
 ```json
 {
   "business_name": "...",
@@ -245,7 +247,7 @@ Analyze all pages across 4 dimensions:
 
 Rate each: **Strong** / **Adequate** / **Weak**. Identify top 3 strengths and top 3 quick wins.
 
-Write to `output/brand-audit.json` (full schema as defined in brand-audit.md Phase 3.5).
+Write to `output/[SLUG]/brand-audit.json` (full schema as defined in brand-audit.md Phase 3.5).
 
 Display progress: "Brand audit complete. Voice: [rating], Visual: [rating], SEO: [rating], Conversion: [rating]."
 
@@ -265,7 +267,7 @@ Parse JSON output:
 - Core Web Vitals: FCP, LCP, TBT, CLS, Speed Index
 - Top 5 failing audits for categories below 90
 
-Write to `output/lighthouse-audit.json`.
+Write to `output/[SLUG]/lighthouse-audit.json`.
 
 If Lighthouse fails: note "Lighthouse unavailable" and continue. The proposal will skip the performance section.
 
@@ -304,14 +306,14 @@ Type a template name, or press enter for default.
 
 ## Step 9: Generate Proposal
 
-Read all three JSON files from `output/`.
+Read all three JSON files from `output/[SLUG]/`.
 Read agency config and selected pricing template.
 
 **Synthesize recommendations:** map audit findings and opportunity signals to agency services. Prioritize by impact: conversion and revenue first, then SEO, then aesthetics.
 
 **Generate executive summary:** 3-4 sentences. What was found, why it matters, what you recommend. Reference specific scores.
 
-**Build the competitive comparison:** Using the `prospect_signals` and `competitors[].signals` data from `output/prospect-research.json`, generate:
+**Build the competitive comparison:** Using the `prospect_signals` and `competitors[].signals` data from `output/[SLUG]/prospect-research.json`, generate:
 
 - `{{ competitive_intro }}` — 1-2 sentences: "Here's how [CLIENT_NAME] compares to [N] local competitors on key digital presence indicators."
 - `{{ competitor_headers }}` — `<th>` elements for each competitor name
@@ -338,18 +340,16 @@ Read agency config and selected pricing template.
 - Pricing: tier cards from selected template
 - Next steps: agency contact info
 
-Create filename slug from client name (lowercase, hyphens, no special chars).
-
 Write:
-- `output/proposal-[slug].html`
-- `output/proposal-[slug].md` (markdown version)
+- `output/[SLUG]/proposal.html`
+- `output/[SLUG]/proposal.md` (markdown version)
 
 **Generate PDF:**
 ```
-python3 scripts/generate_pdf.py output/proposal-[slug].html output/proposal-[slug].pdf
+python3 scripts/generate_pdf.py output/[SLUG]/proposal.html output/[SLUG]/proposal.pdf
 ```
 
-Open the PDF: `open output/proposal-[slug].pdf`
+Open the PDF: `open output/[SLUG]/proposal.pdf`
 
 ---
 
@@ -357,7 +357,7 @@ Open the PDF: `open output/proposal-[slug].pdf`
 
 Using data already collected from prospect research, brand audit, and Lighthouse, generate an internal sales document. This is NOT for the client. It's for the person making the call.
 
-Write to `output/brief-[slug].md`:
+Write to `output/[SLUG]/brief.md`:
 
 ```markdown
 # Sales Brief: [CLIENT_NAME]
@@ -430,7 +430,7 @@ I put together a short report that breaks all of this down. No cost, no obligati
 
 ## Step 11: Generate Follow-up Email
 
-Write a ready-to-send follow-up email to `output/email-[slug].md`. This is the email the user sends after the call (or instead of a call if email is the only contact method).
+Write a ready-to-send follow-up email to `output/[SLUG]/email.md`. This is the email the user sends after the call (or instead of a call if email is the only contact method).
 
 Use data from the prospect research, brand audit, and Lighthouse to personalize every line. No generic filler.
 
@@ -473,10 +473,16 @@ Everything is ready for [CLIENT_NAME].
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 YOUR FILES:
-1. output/brief-[slug].md          ← Read this first (contact info + call script)
-2. output/email-[slug].md          ← Copy/paste into your email client
-3. output/proposal-[slug].pdf      ← Attach this to the email
-4. output/proposal-[slug].html     ← Or send this link if hosted
+All files in: output/[SLUG]/
+
+1. brief.md              ← Read this first (contact info + call script)
+2. email.md              ← Copy/paste into your email client
+3. proposal.pdf          ← Attach this to the email
+4. proposal.html         ← Or send this link if hosted
+5. proposal.md           ← Markdown version
+6. prospect-research.json
+7. brand-audit.json
+8. lighthouse-audit.json
 
 YOUR NEXT STEPS:
 1. Open brief-[slug].md and review the contact info and call script
