@@ -384,8 +384,9 @@
       </div>
     </div>
 
-    <p>Then install dependencies and configure your profile:</p>
+    <p>Install system dependencies (macOS), then Python packages:</p>
 
+    <div class="code">brew install gobject-introspection pango cairo glib</div>
     <div class="code">pip install -r requirements.txt</div>
     <div class="code">claude<br><span style="color: var(--text-muted);">&gt;</span> /setup</div>
 
@@ -404,16 +405,26 @@
 
     <p>Here's what happens:</p>
 
+    <div class="tip">
+      <div class="tip-label">Pipeline</div>
+      <div class="tip-text">On repeat runs, you'll be asked if you want to review your existing pipeline or search new prospects. All discovered prospects are saved and scored automatically.</div>
+    </div>
+
     <div class="steps">
       <div class="step">
         <div class="step-you">You decide</div>
+        <div class="step-title">Choose a location</div>
+        <div class="step-desc">Confirm your city/metro area, or enter a new one for this search.</div>
+      </div>
+      <div class="step">
+        <div class="step-you">You decide</div>
         <div class="step-title">Pick a business category</div>
-        <div class="step-desc">Choose from suggestions based on your profile (e.g., "Plumbers in Austin, TX") or type your own.</div>
+        <div class="step-desc">Choose from suggestions based on your profile (e.g., "Plumbers", "Dentists") or type your own.</div>
       </div>
       <div class="step">
         <div class="step-auto">Automated</div>
-        <div class="step-title">Prospects are found and ranked</div>
-        <div class="step-desc">Web search finds 5 local businesses and scans their websites for opportunity signals. Results are ranked by number of gaps.</div>
+        <div class="step-title">Prospects found, ranked, and saved</div>
+        <div class="step-desc">Web search finds 5 local businesses, scans their sites for opportunity signals, ranks by gap count, and saves all results to your pipeline.</div>
       </div>
       <div class="step">
         <div class="step-you">You decide</div>
@@ -422,8 +433,8 @@
       </div>
       <div class="step">
         <div class="step-auto">Automated</div>
-        <div class="step-title">Deep research runs</div>
-        <div class="step-desc">Business dossier, competitor analysis, and detailed opportunity signals are compiled.</div>
+        <div class="step-title">Deep research + competitor scan</div>
+        <div class="step-desc">Business dossier, competitor analysis, and detailed opportunity signals. Competitors are scanned for a side-by-side comparison.</div>
       </div>
       <div class="step">
         <div class="step-auto">Automated</div>
@@ -443,13 +454,13 @@
       <div class="step">
         <div class="step-auto">Automated</div>
         <div class="step-title">Everything generates</div>
-        <div class="step-desc">Branded PDF proposal, sales brief with call script, and follow-up email. All personalized with real audit data.</div>
+        <div class="step-desc">Branded PDF proposal with competitive comparison, sales brief with call script, and follow-up email. All personalized with real audit data.</div>
       </div>
     </div>
 
     <div class="tip">
       <div class="tip-label">Total time</div>
-      <div class="tip-text">About 4-5 minutes. You make 3 decisions. The system handles everything else.</div>
+      <div class="tip-text">About 4-5 minutes. You make 4 decisions. The system handles everything else.</div>
     </div>
   </section>
 
@@ -459,7 +470,7 @@
     <h2 class="section-title">Output Files</h2>
     <div class="section-divider"></div>
 
-    <p>Every run generates these files in the <code style="color: var(--accent);">output/</code> folder:</p>
+    <p>Each prospect gets its own folder at <code style="color: var(--accent);">output/[prospect-name]/</code>:</p>
 
     <table class="output-table">
       <thead>
@@ -471,32 +482,49 @@
       </thead>
       <tbody>
         <tr>
-          <td class="file">brief-[name].md</td>
+          <td class="file">brief.md</td>
           <td>Contact info, internal briefing, call script</td>
           <td>Read first. Use for the call.</td>
         </tr>
         <tr>
-          <td class="file">email-[name].md</td>
+          <td class="file">email.md</td>
           <td>Personalized follow-up email</td>
           <td>Copy into your email client.</td>
         </tr>
         <tr>
-          <td class="file">proposal-[name].pdf</td>
-          <td>Branded client-facing proposal</td>
+          <td class="file">proposal.pdf</td>
+          <td>Branded proposal with competitive comparison</td>
           <td>Attach to the email.</td>
         </tr>
         <tr>
-          <td class="file">proposal-[name].html</td>
+          <td class="file">proposal.html</td>
           <td>Interactive web version</td>
           <td>Optional: host or share a link.</td>
         </tr>
         <tr>
-          <td class="file">proposal-[name].md</td>
+          <td class="file">proposal.md</td>
           <td>Markdown version</td>
           <td>Reference or edit as needed.</td>
         </tr>
+        <tr>
+          <td class="file">prospect-research.json</td>
+          <td>Detailed research data + competitor signals</td>
+          <td>Raw data. Used by proposal generation.</td>
+        </tr>
+        <tr>
+          <td class="file">brand-audit.json</td>
+          <td>Brand audit results</td>
+          <td>Raw data. Used by proposal generation.</td>
+        </tr>
+        <tr>
+          <td class="file">lighthouse-audit.json</td>
+          <td>Lighthouse performance data</td>
+          <td>Raw data. Used by proposal generation.</td>
+        </tr>
       </tbody>
     </table>
+
+    <p style="margin-top: 16px;">Additionally, <code style="color: var(--accent);">output/pipeline.csv</code> tracks all prospects across runs, and <code style="color: var(--accent);">output/prospect-scans/</code> saves the full roster from each search.</p>
   </section>
 
   <!-- After the run -->
