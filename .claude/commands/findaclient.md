@@ -276,17 +276,95 @@ Open the PDF: `open output/proposal-[slug].pdf`
 
 ---
 
-## Step 9: Deliver
+## Step 9: Generate Sales Brief
+
+Using data already collected from prospect research, brand audit, and Lighthouse, generate an internal sales document. This is NOT for the client. It's for the person making the call.
+
+Write to `output/brief-[slug].md`:
+
+```markdown
+# Sales Brief: [CLIENT_NAME]
+**Generated:** [date] | **Category:** [industry] | **Location:** [location]
+
+---
+
+## Contact Information
+
+- **Business:** [name]
+- **Website:** [url]
+- **Phone:** [phone number if found during research]
+- **Email:** [email if found on contact page or website]
+- **Address:** [physical address if found]
+- **Decision maker:** [owner/manager name if found during research, or "not identified"]
+- **Best contact method:** [recommend based on what's available: phone if listed prominently, email if contact form only, walk-in if local with address]
+
+## Internal Briefing
+
+### What they do
+[1-2 sentences from prospect research: industry, services, target market]
+
+### What's working
+[2-3 bullet points from brand audit strengths. Lead with positives so the call doesn't feel like an attack.]
+
+### Key pain points (use these in the call)
+[3-5 bullet points derived from opportunity signals and audit findings. Be specific:]
+- [e.g., "Site has no meta descriptions on any page. They're invisible to Google for local searches."]
+- [e.g., "No online booking. Every competitor in the area has it."]
+- [e.g., "Lighthouse performance score is 38. Site takes 6+ seconds to load on mobile."]
+- [e.g., "No Google Business Profile found. Missing the #1 free local marketing channel."]
+
+### Competitive context
+[1-2 sentences about how they compare to local competitors found during research]
+
+### Recommended service package
+[Template name and recommended tier based on the gaps found. Brief justification: "Their biggest issues are performance and SEO, which the Growth tier covers."]
+
+## Call Script
+
+### Opening (15 seconds)
+"Hi, is this [decision maker / the owner]? My name is [YOUR NAME] from [AGENCY NAME]. I was looking at local [industry] businesses in [location] and came across [BUSINESS NAME]. I noticed a few things on your website that might be costing you customers. Do you have two minutes?"
+
+### If they say yes: Lead with value (30 seconds)
+"I ran a quick audit on [website]. A couple things stood out:
+
+[Pick the top 2 pain points. Frame as lost revenue, not technical problems:]
+- [e.g., "Your site takes about 6 seconds to load on a phone. Google's data shows that 53% of mobile visitors leave if a page takes more than 3 seconds. That's real traffic you're losing."]
+- [e.g., "When someone searches '[industry] in [location],' your site isn't showing up with a description. Your competitors are. That means they're getting the click, not you."]
+
+I put together a short report that breaks all of this down. No cost, no obligation. Can I send it over?"
+
+### If they want more detail
+"The report covers four areas: how your brand comes across online, your site's technical performance, your SEO visibility, and how well your site converts visitors into leads. Each one is scored and I've included specific recommendations."
+
+### If they ask about cost
+"The audit itself is free. If you want help implementing the fixes, I can walk you through some options. Our [RECOMMENDED TIER] package at $[PRICE] covers the main issues I found, but there's no pressure. The report is useful on its own."
+
+### Objection handling
+- **"I'm happy with my website":** "That's great. The report might confirm that. Either way, it's worth a look. I found [X specific issue] that could be a quick fix."
+- **"I don't have budget right now":** "No problem. The report is free and the recommendations don't expire. When you're ready to invest, you'll have a clear priority list."
+- **"Send me an email":** "Absolutely. What's the best email? I'll send the report over today."
+- **"Not interested":** "No worries. Thanks for your time."
+
+### Close
+"I'll send that report over to [email]. It'll have everything we talked about plus the specific numbers. If anything catches your eye, just reply and we can set up a quick call. Sound good?"
+```
+
+---
+
+## Step 10: Deliver
 
 Display the final summary:
 
 ```
-Proposal ready for [CLIENT_NAME].
+Ready to reach out to [CLIENT_NAME].
 
-Files:
-- output/proposal-[slug].pdf — print-ready proposal
+Proposal files:
+- output/proposal-[slug].pdf — send this to the prospect
 - output/proposal-[slug].html — interactive web version
 - output/proposal-[slug].md — markdown version
+
+Sales prep:
+- output/brief-[slug].md — internal briefing, contact info, and call script
 
 Audit summary:
 - Brand: Voice [rating], Visual [rating], SEO [rating], Conversion [rating]
