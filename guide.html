@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal Pack — Quick Start Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #06060a;
+    --bg-card: #0e0e14;
+    --bg-card-hover: #13131b;
+    --bg-elevated: #1a1a24;
+    --border: #1e1e2a;
+    --border-accent: #2a2a3a;
+    --text-primary: #e8e8ed;
+    --text-secondary: #8a8a9a;
+    --text-muted: #55556a;
+    --accent: #3B82F6;
+    --accent-dim: #2563EB;
+    --accent-glow: rgba(59, 130, 246, 0.15);
+    --green: #34d399;
+    --green-dim: rgba(52, 211, 153, 0.12);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251, 191, 36, 0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 20px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 120px 0 64px;
+    text-align: center;
+    position: relative;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    padding: 6px 14px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 100px;
+    background: rgba(59, 130, 246, 0.06);
+    position: relative;
+  }
+  .hero-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 64px;
+  }
+  .section-number {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .section-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border-accent);
+    margin-bottom: 24px;
+  }
+  .section p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  /* ── Command card ── */
+  .cmd-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .cmd-card:hover { border-color: var(--border-accent); }
+  .cmd-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: 'DM Sans', monospace;
+    margin-bottom: 6px;
+  }
+  .cmd-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .cmd-tag {
+    display: inline-flex;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 10px;
+  }
+  .cmd-tag.primary { background: var(--accent-glow); color: var(--accent); }
+  .cmd-tag.standalone { background: var(--green-dim); color: var(--green); }
+
+  /* ── Step cards ── */
+  .steps {
+    counter-reset: step;
+  }
+  .step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 24px 24px 72px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .step-you {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--amber);
+    margin-bottom: 4px;
+  }
+  .step-auto {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green);
+    margin-bottom: 4px;
+  }
+
+  /* ── Code block ── */
+  .code {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    font-family: 'DM Sans', monospace;
+    font-size: 14px;
+    color: var(--accent);
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+
+  /* ── Output table ── */
+  .output-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+  .output-table thead { background: var(--bg-elevated); }
+  .output-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .output-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .output-table tr:last-child td { border-bottom: none; }
+  .output-table .file { font-weight: 600; color: var(--text-primary); font-family: 'DM Sans', monospace; font-size: 12px; }
+
+  /* ── Prereqs ── */
+  .prereq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .prereq {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .prereq-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--green-dim);
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .prereq-label { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+
+  /* ── Tip ── */
+  .tip {
+    background: var(--accent-glow);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .tip-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .tip-text {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+  .footer p { font-size: 12px; color: var(--text-muted); }
+
+  @media (max-width: 600px) {
+    .container { padding: 0 20px; }
+    .hero { padding: 80px 0 48px; }
+    .prereq-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-label">Quick Start Guide</div>
+    <h1 class="hero-title">Proposal <em>Pack</em></h1>
+    <p class="hero-desc">Find prospects, audit their websites, and generate branded proposals. Three decisions, everything else is automated.</p>
+  </div>
+
+  <!-- Setup -->
+  <section class="section">
+    <div class="section-number">Getting Started</div>
+    <h2 class="section-title">Installation</h2>
+    <div class="section-divider"></div>
+
+    <p>You need four things before your first run:</p>
+
+    <div class="prereq-grid">
+      <div class="prereq">
+        <div class="prereq-icon">&#10003;</div>
+        <div class="prereq-label">Claude Code</div>
+      </div>
+      <div class="prereq">
+        <div class="prereq-icon">&#10003;</div>
+        <div class="prereq-label">Python 3.x</div>
+      </div>
+      <div class="prereq">
+        <div class="prereq-icon">&#10003;</div>
+        <div class="prereq-label">Node.js</div>
+      </div>
+      <div class="prereq">
+        <div class="prereq-icon">&#10003;</div>
+        <div class="prereq-label">Chrome / Chromium</div>
+      </div>
+    </div>
+
+    <p>Then install dependencies and configure your profile:</p>
+
+    <div class="code">pip install -r requirements.txt</div>
+    <div class="code">claude<br><span style="color: var(--text-muted);">&gt;</span> /setup</div>
+
+    <p>The setup wizard asks for your agency name, services, brand colors, and default pricing. Takes about 2 minutes. You only do this once.</p>
+  </section>
+
+  <!-- Main workflow -->
+  <section class="section">
+    <div class="section-number">The Main Workflow</div>
+    <h2 class="section-title">/findaclient</h2>
+    <div class="section-divider"></div>
+
+    <p>This is the one command that does everything. Open Claude Code and run:</p>
+
+    <div class="code"><span style="color: var(--text-muted);">&gt;</span> /findaclient</div>
+
+    <p>Here's what happens:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-you">You decide</div>
+        <div class="step-title">Pick a business category</div>
+        <div class="step-desc">Choose from suggestions based on your profile (e.g., "Plumbers in Austin, TX") or type your own.</div>
+      </div>
+      <div class="step">
+        <div class="step-auto">Automated</div>
+        <div class="step-title">Prospects are found and ranked</div>
+        <div class="step-desc">Web search finds 5 local businesses and scans their websites for opportunity signals. Results are ranked by number of gaps.</div>
+      </div>
+      <div class="step">
+        <div class="step-you">You decide</div>
+        <div class="step-title">Pick a prospect</div>
+        <div class="step-desc">The top prospect is recommended. Pick it or choose another from the list.</div>
+      </div>
+      <div class="step">
+        <div class="step-auto">Automated</div>
+        <div class="step-title">Deep research runs</div>
+        <div class="step-desc">Business dossier, competitor analysis, and detailed opportunity signals are compiled.</div>
+      </div>
+      <div class="step">
+        <div class="step-auto">Automated</div>
+        <div class="step-title">Brand audit runs</div>
+        <div class="step-desc">Up to 5 pages analyzed for voice, visual identity, SEO, and conversion signals. Each dimension scored.</div>
+      </div>
+      <div class="step">
+        <div class="step-auto">Automated</div>
+        <div class="step-title">Lighthouse audit runs</div>
+        <div class="step-desc">Performance, accessibility, best practices, and SEO scores. Core Web Vitals measured.</div>
+      </div>
+      <div class="step">
+        <div class="step-you">You decide</div>
+        <div class="step-title">Pick a pricing package</div>
+        <div class="step-desc">Your default is pre-selected. Accept it or choose a different template.</div>
+      </div>
+      <div class="step">
+        <div class="step-auto">Automated</div>
+        <div class="step-title">Everything generates</div>
+        <div class="step-desc">Branded PDF proposal, sales brief with call script, and follow-up email. All personalized with real audit data.</div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-label">Total time</div>
+      <div class="tip-text">About 4-5 minutes. You make 3 decisions. The system handles everything else.</div>
+    </div>
+  </section>
+
+  <!-- Output files -->
+  <section class="section">
+    <div class="section-number">What You Get</div>
+    <h2 class="section-title">Output Files</h2>
+    <div class="section-divider"></div>
+
+    <p>Every run generates these files in the <code style="color: var(--accent);">output/</code> folder:</p>
+
+    <table class="output-table">
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>What It Is</th>
+          <th>What To Do</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="file">brief-[name].md</td>
+          <td>Contact info, internal briefing, call script</td>
+          <td>Read first. Use for the call.</td>
+        </tr>
+        <tr>
+          <td class="file">email-[name].md</td>
+          <td>Personalized follow-up email</td>
+          <td>Copy into your email client.</td>
+        </tr>
+        <tr>
+          <td class="file">proposal-[name].pdf</td>
+          <td>Branded client-facing proposal</td>
+          <td>Attach to the email.</td>
+        </tr>
+        <tr>
+          <td class="file">proposal-[name].html</td>
+          <td>Interactive web version</td>
+          <td>Optional: host or share a link.</td>
+        </tr>
+        <tr>
+          <td class="file">proposal-[name].md</td>
+          <td>Markdown version</td>
+          <td>Reference or edit as needed.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- After the run -->
+  <section class="section">
+    <div class="section-number">After The Run</div>
+    <h2 class="section-title">Your Next Steps</h2>
+    <div class="section-divider"></div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-title">Open the sales brief</div>
+        <div class="step-desc">Review the contact info, pain points, and call script. The brief tells you exactly what to say and why.</div>
+      </div>
+      <div class="step">
+        <div class="step-title">Make the call</div>
+        <div class="step-desc">Use the call script. Lead with their specific problems, not your services. The 15-second opener gets you in the door.</div>
+      </div>
+      <div class="step">
+        <div class="step-title">Send the email</div>
+        <div class="step-desc">Open the email draft, paste it into your email client, attach the PDF proposal, and send.</div>
+      </div>
+      <div class="step">
+        <div class="step-title">Follow up in 3 days</div>
+        <div class="step-desc">If no response, send a short follow-up. The audit data doesn't expire.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Other commands -->
+  <section class="section">
+    <div class="section-number">All Commands</div>
+    <h2 class="section-title">Individual Skills</h2>
+    <div class="section-divider"></div>
+
+    <p>Each skill also works on its own if you need just one piece.</p>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/findaclient</div>
+      <div class="cmd-desc">Full guided workflow. Find a prospect, audit them, generate a proposal, call script, and email. One command.</div>
+      <div class="cmd-tag primary">Start here</div>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/proposal &lt;url&gt;</div>
+      <div class="cmd-desc">Generate a full proposal for a specific URL. Also accepts a category + location to find prospects first.</div>
+      <div class="cmd-tag standalone">Standalone</div>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/brand-audit &lt;url&gt;</div>
+      <div class="cmd-desc">Scan a website for voice, visual identity, SEO, and conversion signals. Add <code style="color: var(--accent);">--save-json</code> to export data.</div>
+      <div class="cmd-tag standalone">Standalone</div>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/lighthouse-audit &lt;url&gt;</div>
+      <div class="cmd-desc">Run a Lighthouse performance audit. Scores, Core Web Vitals, and top issues.</div>
+      <div class="cmd-tag standalone">Standalone</div>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/prospect-research &lt;query&gt;</div>
+      <div class="cmd-desc">Build a business dossier. Accepts a URL, business name, or industry + location.</div>
+      <div class="cmd-tag standalone">Standalone</div>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/setup</div>
+      <div class="cmd-desc">Configure your agency profile, services, and default pricing. Run once.</div>
+      <div class="cmd-tag standalone">Standalone</div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section">
+    <div class="section-number">Customization</div>
+    <h2 class="section-title">Pricing Templates</h2>
+    <div class="section-divider"></div>
+
+    <p>Four templates ship out of the box. You pick your default during <code style="color: var(--accent);">/setup</code> and can override per-proposal.</p>
+
+    <div class="cmd-card">
+      <div class="cmd-name">Website Redesign</div>
+      <div class="cmd-desc">Starter ($2,500) / Growth ($5,000) / Premium ($10,000)</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">Monthly Retainer</div>
+      <div class="cmd-desc">Essentials ($997/mo) / Growth ($2,500/mo) / Scale ($5,000/mo)</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">One-Time Audit</div>
+      <div class="cmd-desc">Deep Audit ($1,500)</div>
+    </div>
+    <div class="cmd-card">
+      <div class="cmd-name">Hybrid Bundle</div>
+      <div class="cmd-desc">Launch ($4K + $750/mo) / Accelerate ($7.5K + $1.5K/mo) / Dominate ($15K + $3.5K/mo)</div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-label">Customization</div>
+      <div class="tip-text">Edit the JSON files in <code style="color: var(--accent);">config/pricing-templates/</code> to change tier names, prices, and line items. Or customize during <code style="color: var(--accent);">/setup</code>.</div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <p>Proposal Pack for Claude Code</p>
+  </div>
+
+</div>
+
+</body>
+</html>

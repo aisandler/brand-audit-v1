@@ -136,6 +136,23 @@ From the results, compile:
 - Competitors: 2-3 local competitors with URLs
 - Opportunity signals: expanded from the quick scan with additional detail
 
+### Competitor Scan
+
+For each competitor found (up to 3), **WebFetch their homepage in parallel**. For each competitor, do a quick check of:
+
+- **HTTPS:** does the URL use https?
+- **Meta description:** present or missing?
+- **H1 tag:** present or missing?
+- **Schema markup:** any structured data?
+- **Mobile viewport:** has `<meta name="viewport">`?
+- **Google Business Profile:** found in search results? Rating?
+- **Social media links:** any social links on the page?
+- **Online booking:** scheduling or booking link present?
+- **Contact form:** form element on the page?
+- **CTA above fold:** clear call-to-action in the first section?
+
+Record the same checks for the prospect (from the homepage already fetched). This builds the data for the competitive comparison table in the proposal.
+
 Create `output/` directory if it doesn't exist (`mkdir -p output` via Bash).
 
 Write to `output/prospect-research.json`:
@@ -152,12 +169,42 @@ Write to `output/prospect-research.json`:
     "social_media": [{ "platform": "...", "url": "..." }],
     "directories": []
   },
-  "competitors": [{ "name": "...", "url": "...", "notes": "..." }],
+  "competitors": [
+    {
+      "name": "...",
+      "url": "...",
+      "notes": "...",
+      "signals": {
+        "https": true,
+        "meta_description": true,
+        "h1_tag": true,
+        "schema_markup": false,
+        "mobile_viewport": true,
+        "google_business": { "found": true, "rating": 4.2 },
+        "social_media": true,
+        "online_booking": false,
+        "contact_form": true,
+        "cta_above_fold": true
+      }
+    }
+  ],
+  "prospect_signals": {
+    "https": false,
+    "meta_description": false,
+    "h1_tag": true,
+    "schema_markup": false,
+    "mobile_viewport": true,
+    "google_business": { "found": false },
+    "social_media": false,
+    "online_booking": false,
+    "contact_form": false,
+    "cta_above_fold": false
+  },
   "opportunity_signals": []
 }
 ```
 
-Display brief progress: "[CLIENT_NAME]: [industry] in [location]. [N] opportunity signals confirmed."
+Display brief progress: "[CLIENT_NAME]: [industry] in [location]. [N] opportunity signals confirmed. [N] competitors scanned."
 
 ---
 
@@ -251,12 +298,29 @@ Read agency config and selected pricing template.
 
 **Generate executive summary:** 3-4 sentences. What was found, why it matters, what you recommend. Reference specific scores.
 
+**Build the competitive comparison:** Using the `prospect_signals` and `competitors[].signals` data from `output/prospect-research.json`, generate:
+
+- `{{ competitive_intro }}` — 1-2 sentences: "Here's how [CLIENT_NAME] compares to [N] local competitors on key digital presence indicators."
+- `{{ competitor_headers }}` — `<th>` elements for each competitor name
+- `{{ competitive_rows }}` — table rows for each feature. Use `<span class="comp-icon-yes">&#10003;</span>` for present, `<span class="comp-icon-no">&#10007;</span>` for missing. Features to compare:
+  - HTTPS / SSL
+  - Meta descriptions
+  - Schema markup
+  - Mobile-friendly
+  - Google Business Profile
+  - Social media presence
+  - Online booking
+  - Contact form
+  - Clear CTA above fold
+- `{{ competitive_summary }}` — 2-3 sentences summarizing where the prospect falls behind competitors and what that means for their business. Be specific: "2 of 3 competitors have online booking. [CLIENT_NAME] does not, which means potential customers have an easier path to convert with competitors."
+
 **Build the HTML proposal:** Read `templates/proposal.html`. Replace all `{{ }}` tokens with generated content:
 
 - Cover: agency name, client name, date, tagline
 - Executive summary
 - Brand audit: score cards, voice details, visual details, SEO table, tech checks, conversion signals
 - Performance audit: Lighthouse scores, Core Web Vitals, top issues
+- Competitive comparison: prospect vs competitors feature table
 - Recommendations: prioritized action items tagged with services
 - Pricing: tier cards from selected template
 - Next steps: agency contact info
