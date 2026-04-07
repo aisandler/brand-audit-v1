@@ -6,7 +6,7 @@
 
 ## Trigger
 
-User runs `/proposal` and provides a prospect URL.
+User runs `/proposal` and provides either a prospect URL or a category + location.
 
 ## Pre-flight Checks
 
@@ -24,11 +24,67 @@ If all checks pass, proceed.
 
 ## Input Collection
 
-Parse the arguments for:
+Parse the arguments to determine the input mode:
 
-- **Prospect URL** (required). If not provided, ask: "What URL should I build the proposal for?"
-- **`--tier`** flag (optional). Values: `website-redesign`, `monthly-retainer`, `one-time-audit`, `hybrid`. If not provided, use the default from `config/agency-config.json` field `pricing_template`.
-- **`--brand`** flag (optional). Values: `prospect` or `seller`. Default: `seller`. Controls whether the proposal uses the prospect's brand colors or the agency's brand colors.
+- **URL mode** — argument contains `http` or a domain pattern (e.g., `example.com`). Proceed directly to Phase 1 with that URL.
+- **Discovery mode** — argument is a category + location (e.g., `dentists in Portland`, `restaurants Austin TX`). Proceed to Phase 0 first.
+- **No arguments** — ask: "What should I build a proposal for? Give me a URL or a category + location (e.g., 'dentists in Portland')."
+
+Also parse optional flags:
+- **`--tier`** (optional). Values: `website-redesign`, `monthly-retainer`, `one-time-audit`, `hybrid`. If not provided, use the default from `config/agency-config.json` field `pricing_template`.
+- **`--brand`** (optional). Values: `prospect` or `seller`. Default: `seller`. Controls whether the proposal uses the prospect's brand colors or the agency's brand colors.
+
+---
+
+## Phase 0: Lead Discovery (discovery mode only)
+
+This phase runs only when the user provided a category + location instead of a URL.
+
+Tell the user: "Finding [category] prospects in [location]..."
+
+Run WebSearch queries **in parallel**:
+
+1. `best [category] in [location]`
+2. `[category] near [location]`
+3. `top rated [category] [location]`
+
+For the top 5 results that are actual businesses (not directories or aggregator sites), WebFetch their homepages **in parallel**.
+
+For each business, do a quick scan:
+- Business name and URL
+- Google rating and review count (from search snippets)
+- 2-3 opportunity signals visible from the homepage (missing meta description, no SSL, no mobile optimization, weak CTAs, no schema markup, generic design, missing contact form)
+
+Rank the leads by opportunity density (number and severity of gaps). The business with the most opportunity signals is the top prospect.
+
+Present the results using **AskUserQuestion** with the top prospect as the recommended default. Format the question like this:
+
+Title: "Found [N] prospects. Here's the top match."
+
+Body:
+```
+**Recommended: [#1 Business Name]** ([url]) — [N] opportunity signals
+[list the signals: no SSL, missing meta descriptions, etc.]
+
+Other prospects:
+2. [Business Name] ([url]) — [brief signals]
+3. [Business Name] ([url]) — [brief signals]
+...
+
+Pick a number, or "all" for batch mode.
+```
+
+Default value: "1"
+
+If the user picks a number: set that business's URL as `CLIENT_URL` and name as `CLIENT_NAME`, then proceed to Phase 1.
+
+If the user says "all": run Phases 1-7 sequentially for each selected business, generating a separate proposal for each. Confirm before starting: "That's [N] proposals. Each takes about 4-5 minutes. Proceed?"
+
+---
+
+## Input Finalization (URL mode)
+
+For URL mode only:
 
 Store the URL as `CLIENT_URL`. Strip trailing slashes. Ensure it has a protocol (default to `https://`).
 
